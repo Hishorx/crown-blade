@@ -10,7 +10,7 @@ import tailwindcss from '@tailwindcss/vite'
 // - For a local production build, the fallback below is used. Change it if your
 //   repository has a different name.
 // - Using a custom domain or a <user>.github.io repo? Set BASE_PATH to "/".
-const REPO_BASE_FALLBACK = '/crown-and-blade-barbers/'
+const REPO_BASE_FALLBACK = '/crown-blade/'
 
 export default defineConfig(({ command }) => ({
   plugins: [react(), tailwindcss()],
