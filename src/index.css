@@ -1,0 +1,210 @@
+@import "tailwindcss";
+
+/* ── Design tokens ─────────────────────────────────────────────── */
+@theme {
+  --color-black: #000000;
+  --color-charcoal: #1c1c1e;
+  --color-graphite: #2c2c2f;
+  --color-stone: #a29d92;
+  --color-ivory: #f2ecdf;
+  --color-ivory-dim: #e6dfcf;
+  --color-gold: #b39a62;
+  --color-gold-soft: #cdb886;
+  --color-gold-deep: #6f5c2e;
+
+  --font-display: "Bodoni Moda", "Didot", "Bodoni 72", "Times New Roman", serif;
+  --font-sans: "Hanken Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ── Base ───────────────────────────────────────────────────────── */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background-color: var(--color-black);
+    color: var(--color-ivory);
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  p { text-wrap: pretty; }
+  ::selection { background: var(--color-gold); color: var(--color-black); }
+
+  :focus-visible {
+    outline: 2px solid var(--color-gold-soft);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+  .on-ivory :focus-visible { outline-color: var(--color-gold-deep); }
+}
+
+/* ── Components ─────────────────────────────────────────────────── */
+@layer components {
+  .container-x {
+    width: 100%;
+    max-width: 76rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 640px) { .container-x { padding-inline: 2rem; } }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    min-height: 3rem;
+    padding: 0.8rem 1.5rem;
+    font-weight: 600;
+    font-size: 0.975rem;
+    letter-spacing: 0.01em;
+    border-radius: 999px;
+    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease,
+      transform 0.25s var(--ease-out-soft);
+  }
+  .btn:active { transform: translateY(1px); }
+  .btn-gold { background: var(--color-gold); color: var(--color-black); }
+  .btn-gold:hover { background: var(--color-gold-soft); }
+  .btn-ghost { border: 1px solid rgb(242 236 223 / 0.35); color: var(--color-ivory); }
+  .btn-ghost:hover { border-color: var(--color-ivory); background: rgb(242 236 223 / 0.06); }
+  .btn-dark { background: var(--color-black); color: var(--color-ivory); }
+  .btn-dark:hover { background: var(--color-charcoal); }
+
+  /* Underline that draws in on hover */
+  .link-draw {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.35s var(--ease-out-soft), color 0.2s ease;
+  }
+  .link-draw:hover, .link-draw[aria-current="true"] { background-size: 100% 1px; }
+
+  /* Section heading rule */
+  .rule-gold { display: block; width: 3rem; height: 1px; background: var(--color-gold); }
+
+  /* Price list dotted leader */
+  .leader {
+    flex: 1 1 auto;
+    min-width: 1.5rem;
+    margin-inline: 0.6rem;
+    border-bottom: 1px dotted rgb(179 154 98 / 0.55);
+    transform: translateY(-0.35em);
+  }
+
+  /* Display type scale */
+  .display-hero {
+    font-size: clamp(3.6rem, 15vw, 9.75rem);
+    line-height: 0.9;
+    letter-spacing: -0.025em;
+  }
+  .display-section { font-size: clamp(2.4rem, 7vw, 4rem); }
+
+  /* Lining, tabular numerals for prices */
+  .nums { font-variant-numeric: lining-nums tabular-nums; }
+}
+
+/* ── Barber pole — the one signature motion on the page ─────────── */
+.pole-stripes {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--color-ivory) 0 14px,
+    var(--color-ivory) 14px 18px,
+    var(--color-gold) 18px 32px,
+    var(--color-ivory) 32px 36px,
+    var(--color-charcoal) 36px 50px,
+    var(--color-ivory) 50px 54px
+  );
+  background-size: 76.37px 76.37px; /* 54px period ÷ sin(45°) keeps the loop seamless */
+  animation: pole-spin 3.2s linear infinite;
+}
+.pole-stripes--h { animation-name: pole-spin-h; }
+@keyframes pole-spin { to { background-position: 0 76.37px; } }
+@keyframes pole-spin-h { to { background-position: 76.37px 0; } }
+
+/* ── Hero entrance (single orchestrated sequence) ───────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  animation: reveal 0.9s var(--ease-out-soft) forwards;
+  animation-delay: var(--d, 0ms);
+}
+@keyframes reveal { to { opacity: 1; transform: none; } }
+
+.grow-y {
+  transform: scaleY(0);
+  transform-origin: top;
+  animation: grow-y 1.2s var(--ease-out-soft) 0.25s forwards;
+}
+@keyframes grow-y { to { transform: scaleY(1); } }
+
+/* ── Mobile menu ────────────────────────────────────────────────── */
+.menu-panel {
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+.menu-panel[data-open="false"] { opacity: 0; visibility: hidden; }
+.menu-panel[data-open="true"] { opacity: 1; visibility: visible; }
+.menu-panel .menu-item {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.45s var(--ease-out-soft), transform 0.45s var(--ease-out-soft);
+  transition-delay: calc(var(--i, 0) * 45ms + 80ms);
+}
+.menu-panel[data-open="true"] .menu-item { opacity: 1; transform: none; }
+
+/* Hamburger → close morph */
+.burger-line {
+  display: block;
+  height: 1.5px;
+  width: 22px;
+  background: currentColor;
+  transition: transform 0.35s var(--ease-out-soft), opacity 0.2s ease;
+}
+.burger-line + .burger-line { margin-top: 6px; }
+.burger[aria-expanded="true"] .burger-line:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+.burger[aria-expanded="true"] .burger-line:nth-child(2) { opacity: 0; }
+.burger[aria-expanded="true"] .burger-line:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+
+/* Floating WhatsApp button */
+.fab {
+  transition: opacity 0.35s ease, transform 0.35s var(--ease-out-soft), background-color 0.25s ease;
+}
+.fab[data-show="false"] { opacity: 0; transform: translateY(16px); pointer-events: none; }
+
+/* Subtle film grain on dark surfaces (pure CSS, no image request) */
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: radial-gradient(rgb(255 255 255 / 0.9) 0.5px, transparent 0.6px);
+  background-size: 3px 3px;
+}
+
+/* ── Reduced motion ─────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+  .reveal, .grow-y { opacity: 1; transform: none; }
+}
